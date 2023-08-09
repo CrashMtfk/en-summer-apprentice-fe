@@ -1,3 +1,5 @@
+
+
 // Navigate to a specific URL
 function navigateTo(url) {
   history.pushState(null, null, url);
@@ -59,36 +61,51 @@ function setupInitialPage() {
 function renderHomePage() {
   const mainContentDiv = document.querySelector('.main-content-component');
   mainContentDiv.innerHTML = getHomePageTemplate();
-  // Sample hardcoded event data
-  const eventData = {
-    id: 1,
-    description: 'Sample event description.',
-    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-    name: 'Sample Event',
-    ticketCategories: [
-      { id: 1, description: 'General Admission' },
-      { id: 2, description: 'VIP' },
-    ],
-  };
-  // Create the event card element
-  const eventCard = document.createElement('div');
-  eventCard.classList.add('event-card'); 
-  // Create the event content markup
-  const contentMarkup = `
-    <header>
-      <h2 class="event-title text-2xl font-bold">${eventData.name}</h2>
-    </header>
-    <div class="content">
-      <img src="${eventData.img}" alt="${eventData.name}" class="event-image w-full height-200 rounded object-cover mb-4">
-      <p class="description text-gray-700">${eventData.description}</p>
-    </div>
-  `;
 
-  eventCard.innerHTML = contentMarkup;
-  const eventsContainer = document.querySelector('.events');
-  // Append the event card to the events container
-  eventsContainer.appendChild(eventCard);
+
+  fetchTicketEvents().then((data) => {
+    addEvents(data);
+  });
+
 }
+
+// WORKSHOP 2
+async function fetchTicketEvents(){
+  const response = await fetch('http://localhost:8080/all_events');
+  console.log(response);
+  const data = await response.json();
+  return data;
+}
+
+const addEvents = (events) => {
+  const eventsDiv = document.querySelector('.events');
+  eventsDiv.innerHTML = 'No invents';
+  if(events.length){
+    eventsDiv.innerHTML = '';
+    events.forEach(event => {
+      eventsDiv.appendChild(createEvent(event));
+    });
+  }
+};
+
+const createEvent = (event) => {
+  const {eventID, eventName, eventDescription} = event;
+  const eventDiv = document.createElement('div');
+  const contentMarkup = `<div class="content m-4 p-4 rounded-lg grid place-items-center drop-shadow-xl">
+    <header>
+      <h2 class="event-title text-2xl font-bold text-center drop-shadow">${eventName}</h2>
+    </header>
+    <div class="event-details my-4">
+      <p class="description text-gray-800">${eventDescription}</p>
+    </div>
+    <button class="buy-tickets-button items-center bg-gray-800 w-28 h-10 rounded drop-shadow-md">Buy tickets</button>
+    </div>
+  `
+
+  eventDiv.innerHTML = contentMarkup;
+  return eventDiv;
+};
+// WORKSHOP 2
 
 function renderOrdersPage(categories) {
   const mainContentDiv = document.querySelector('.main-content-component');

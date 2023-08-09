@@ -22,9 +22,8 @@ h1 {
 }
 
 .event-title {
-  color: #de411b
+  color: #000000
 }
-
 .event img {
   height: 150px;
 }
@@ -71,3 +70,21 @@ h1 {
   margin-bottom: 40px;
 }
 
+.content{
+  background-color: #de411b;
+}
+
+.buy-tickets-button {
+  color: #de411b;
+  font-weight: 700;
+  transition: background-color 0.3s ease-in;
+}
+
+.buy-tickets-button:hover{
+  background-color: #fff;
+}
+
+.event-card .content{
+  width: 320px;
+  height: 472px;
+}
