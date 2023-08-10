@@ -1,4 +1,5 @@
-import { kebabCase, addEvents } from "./src/utils";
+import { addEvents } from "./src/utils";
+import { addOrders } from "./src/ordersUtil";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -20,6 +21,8 @@ function getOrdersPageTemplate() {
   return `
     <div id="content">
     <h1 class="text-2xl mb-4 mt-8 text-center">Purchased Tickets</h1>
+    <div class="orders flex-1 items-center justify-center flex-column flex-wrap">
+    </div>
     </div>
   `;
 }
@@ -81,6 +84,18 @@ async function fetchTicketEvents(){
 function renderOrdersPage(categories) {
   const mainContentDiv = document.querySelector('.main-content-component');
   mainContentDiv.innerHTML = getOrdersPageTemplate();
+
+  const customerID = 3;
+  fetchCustomerOrders(customerID).then((data) => {
+    addOrders(data);
+  });
+}
+
+async function fetchCustomerOrders(customerID){
+  const response = await fetch(`http://localhost:8080/orders/${customerID}`);
+  console.log(response);
+  const data = await response.json();
+  return data;
 }
 
 // Render content based on URL

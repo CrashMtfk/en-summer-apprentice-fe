@@ -21,7 +21,6 @@ const createEvent = (eventData) => {
 
 const createEventElement = (eventData, title) => {
   const {eventID, venue, eventDescription, eventName, startDate, endDate, ticketCategorySet} = eventData;
-  console.log(eventID);
   const eventDiv = document.createElement('div');
 
   const purchaseQuantity = useStyle('purchaseQuantity');
@@ -145,9 +144,7 @@ const createEventElement = (eventData, title) => {
 };
 
 const handleAddToCart = (title, eventID, input, addToCart) => {
-  console.log(title);
   const ticketType = document.querySelector(`.${title}-ticket-type`).value;
-  console.log("Ticket type " + ticketType);
   const quantity = input.value;
   const customerID = 3;
   if(parseInt(quantity)){
