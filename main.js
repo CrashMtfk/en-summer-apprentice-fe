@@ -1,5 +1,6 @@
 import { addEvents } from "./src/utils";
 import { addOrders } from "./src/ordersUtil";
+import { removeLoader, addLoader } from "./src/components/loader";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -65,8 +66,14 @@ function renderHomePage() {
   const mainContentDiv = document.querySelector('.main-content-component');
   mainContentDiv.innerHTML = getHomePageTemplate();
 
+  addLoader();
 
-  fetchTicketEvents().then((data) => {
+  fetchTicketEvents()
+  .then((data) => {
+    setTimeout(() => {
+      removeLoader();
+    }, 180);
+    toastr.success("Events loaded succesfully!");
     addEvents(data);
   });
 
@@ -75,7 +82,6 @@ function renderHomePage() {
 // WORKSHOP 2
 async function fetchTicketEvents(){
   const response = await fetch('http://localhost:8080/all_events');
-  console.log(response);
   const data = await response.json();
   return data;
 }

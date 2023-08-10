@@ -1,4 +1,5 @@
 import { useStyle } from "./components/styles";
+import toastr from "toastr";
 
 export const kebabCase = (str) => str.replaceAll(' ','-');
 
@@ -147,6 +148,7 @@ const handleAddToCart = (title, eventID, input, addToCart) => {
   const ticketType = document.querySelector(`.${title}-ticket-type`).value;
   const quantity = input.value;
   const customerID = 3;
+
   if(parseInt(quantity)){
     fetch(`http://localhost:8080/order/${customerID}`, {
       method:"POST",
@@ -161,17 +163,20 @@ const handleAddToCart = (title, eventID, input, addToCart) => {
     }).then((response) => {
       return response.json().then((data) => {
         if(!response.ok){
-          console.log("Somewthing wrong...");
+          toastr.error("Something went wrong placing your order");
         }
         return data;
       })
     }).then((data) => {
-      console.log("Done!");
+      toastr.success("Order placed succesfully!");
       input.value = 0;
       addToCart.disabled = true;
+    }).catch((err) => {
+      console.log(err);
+      toastr.error("Unable to place your order!");
     });
   }else{
-    // not integer
+    toastr.error("This is not a number!");
   }
 };
 
