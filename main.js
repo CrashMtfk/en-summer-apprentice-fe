@@ -1,4 +1,4 @@
-
+import { kebabCase, addEvents } from "./src/utils";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -76,35 +76,6 @@ async function fetchTicketEvents(){
   const data = await response.json();
   return data;
 }
-
-const addEvents = (events) => {
-  const eventsDiv = document.querySelector('.events');
-  eventsDiv.innerHTML = 'No invents';
-  if(events.length){
-    eventsDiv.innerHTML = '';
-    events.forEach(event => {
-      eventsDiv.appendChild(createEvent(event));
-    });
-  }
-};
-
-const createEvent = (event) => {
-  const {eventID, eventName, eventDescription} = event;
-  const eventDiv = document.createElement('div');
-  const contentMarkup = `<div class="content m-4 p-4 rounded-lg grid place-items-center drop-shadow-xl">
-    <header>
-      <h2 class="event-title text-2xl font-bold text-center drop-shadow">${eventName}</h2>
-    </header>
-    <div class="event-details my-4">
-      <p class="description text-gray-800">${eventDescription}</p>
-    </div>
-    <button class="buy-tickets-button items-center bg-gray-800 w-28 h-10 rounded drop-shadow-md">Buy tickets</button>
-    </div>
-  `
-
-  eventDiv.innerHTML = contentMarkup;
-  return eventDiv;
-};
 // WORKSHOP 2
 
 function renderOrdersPage(categories) {
