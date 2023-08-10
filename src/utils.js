@@ -1,6 +1,6 @@
 import { useStyle } from "./components/styles";
 
-export const kebabCase = (str) => str.replaceAll('','-');
+export const kebabCase = (str) => str.replaceAll(' ','-');
 
 export const addEvents = (events) => {
   const eventsDiv = document.querySelector('.events');
@@ -14,12 +14,14 @@ export const addEvents = (events) => {
 };
 
 const createEvent = (eventData) => {
-  const eventElement = createEventElement(eventData);
+  const title = kebabCase(eventData.eventName);
+  const eventElement = createEventElement(eventData, title);
   return eventElement;
 };
 
-const createEventElement = (eventData) => {
+const createEventElement = (eventData, title) => {
   const {eventID, venue, eventDescription, eventName, startDate, endDate, ticketCategorySet} = eventData;
+  console.log(eventID);
   const eventDiv = document.createElement('div');
 
   const purchaseQuantity = useStyle('purchaseQuantity');
@@ -51,12 +53,12 @@ const createEventElement = (eventData) => {
   
   const categoriesOptions = ticketCategorySet.map(
     (ticketCategory) =>
-      `<option value=${ticketCategory.ticketCategoryID}>${ticketCategory.ticketDescription}</option>` 
+      `<option value="${ticketCategory.ticketCategoryID}">${ticketCategory.ticketDescription}</option>` 
   );
 
   const ticketTypeMarkup = `
     <h2>Choose Ticket Type:</h2>
-    <select id="ticketType" name="ticketType">
+    <select id="ticketType" name="ticketType" class="select ${title}-ticket-type">
       ${categoriesOptions.join('\n')}
     </select>
   `;
@@ -134,13 +136,47 @@ const createEventElement = (eventData) => {
   addToCart.disabled = true;
 
   addToCart.addEventListener('click', () => {
-
+    handleAddToCart(title, eventID, input, addToCart);
   });
   eventFooter.appendChild(addToCart);
   eventDiv.appendChild(eventFooter);
 
   return eventDiv;
-}
+};
+
+const handleAddToCart = (title, eventID, input, addToCart) => {
+  console.log(title);
+  const ticketType = document.querySelector(`.${title}-ticket-type`).value;
+  console.log("Ticket type " + ticketType);
+  const quantity = input.value;
+  const customerID = 3;
+  if(parseInt(quantity)){
+    fetch(`http://localhost:8080/order/${customerID}`, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+      },
+      body:JSON.stringify({
+        eventID:eventID,
+        orderTicketCategoryID:+ticketType,
+        numberOfTickets:quantity
+      })
+    }).then((response) => {
+      return response.json().then((data) => {
+        if(!response.ok){
+          console.log("Somewthing wrong...");
+        }
+        return data;
+      })
+    }).then((data) => {
+      console.log("Done!");
+      input.value = 0;
+      addToCart.disabled = true;
+    });
+  }else{
+    // not integer
+  }
+};
 
 const periodFormat = (startDate, endDate) =>{
     var trimmedStartDate = startDate.split('T')

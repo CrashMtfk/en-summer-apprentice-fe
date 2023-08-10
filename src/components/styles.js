@@ -21,9 +21,10 @@ const bookOfStyles = {
         'justify-center',
     ],
     quantityButtons: [
-        'width:50px',
-        'height:25px',
-        'background-color:white'
+        'w-[50px]',
+        'h-[25px]',
+        'bg-white',
+        'm-4'
     ]
 };
 
