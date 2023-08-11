@@ -17,7 +17,7 @@ const createOrder = (orderData) => {
 const createOrderElement = (orderData) => {
     const {orderedAt, numberOfTickets, totalPrice} = orderData;
     const orderDiv = document.createElement('div');
-    orderDiv.classList.add('orderCard', 'w-96', 'rounded', 'm-4')
+    orderDiv.classList.add('orderCard')
     const orderedDate = orderedAt.split('T');
 
     const contentMarkup = `

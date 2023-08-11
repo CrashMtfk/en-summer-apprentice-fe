@@ -25,22 +25,21 @@ const createEventElement = (eventData, title) => {
   const eventDiv = document.createElement('div');
 
   const purchaseQuantity = useStyle('purchaseQuantity');
-  const quantityElemContainer = useStyle('quantityElementsContainer');
   const quantityButtons = useStyle('quantityButtons');
 
-  eventDiv.classList.add('content', 'm-4', 'p-4', 'rounded-lg', 'grid', 'place-items-center','drop-shadow-xl');
+  eventDiv.classList.add('content', 'm-4', 'p-4', 'grid', 'place-items-center','drop-shadow-xl');
   const formatedPeriod = periodFormat(startDate,endDate);
 
   const contentMarkup = `
     <div>
-      <img src="./src/assets/image-cover.jpg" alt="Event cover image" class="event-image w-80 h-72 rounded object-cover mb-4">
+      <img src="./src/assets/image-cover.jpg" alt="Event cover image" class="event-image">
       <header>
         <h2 class="event-title text-2xl font-bold text-center drop-shadow">${eventName}</h2>
       </header>
       <div class="event-details my-4">
-        <p class="description text-gray-800">${eventDescription}</p>
-        <p class="period text-gray-800 flex"><img src="./src/assets/event_period.svg" class="w-4 mr-2"> ${formatedPeriod}</p>
-        <p class="location text-gray-800 flex"><img src="./src/assets/event_location.svg" class="w-4 mr-2"> ${venue.venueLocation}</p>
+        <p class="description text-white flex"><img src="./src/assets/event_description.svg" class="w-4 mr-2">${eventDescription}</p>
+        <p class="period text-white flex"><img src="./src/assets/event_period.svg" class="w-4 mr-2"> ${formatedPeriod}</p>
+        <p class="location text-white flex"><img src="./src/assets/event_location.svg" class="w-4 mr-2"> ${venue.venueLocation}</p>
       </div>
     </div>
   `;
@@ -49,7 +48,7 @@ const createEventElement = (eventData, title) => {
   // Ticket Category
 
   const actions = document.createElement('div');
-  actions.classList.add('m-4')
+  actions.classList.add('buy-tickets-details','m-4', 'w-max')
   
   const categoriesOptions = ticketCategorySet.map(
     (ticketCategory) =>
@@ -57,7 +56,7 @@ const createEventElement = (eventData, title) => {
   );
 
   const ticketTypeMarkup = `
-    <h2>Choose Ticket Type:</h2>
+    <h2 class ="text-white">Choose Ticket Type:</h2>
     <select id="ticketType" name="ticketType" class="select ${title}-ticket-type">
       ${categoriesOptions.join('\n')}
     </select>
@@ -67,9 +66,9 @@ const createEventElement = (eventData, title) => {
   // Quantity
 
   const quantity = document.createElement('div');
-  quantity.classList.add(...quantityElemContainer);
+  quantity.classList.add('quantity-details');
   const input = document.createElement('input');
-  input.classList.add(...purchaseQuantity);
+  input.readOnly = true;
   input.type ='number';
   input.min = '0';
   input.value = '0';
@@ -91,10 +90,10 @@ const createEventElement = (eventData, title) => {
 
   quantity.appendChild(input);
   const quantityActions = document.createElement('div');
-  
+  quantityActions.classList.add('quantity-buttons');
   // Increase button
   const increase = document.createElement('button');
-  increase.classList.add(...quantityButtons);
+  increase.classList.add('increase-quantity-button');
   increase.innerText = '+';
   increase.addEventListener('click', () => {
     input.value = parseInt(input.value) + 1;
@@ -107,7 +106,7 @@ const createEventElement = (eventData, title) => {
   });
 
   const decrease = document.createElement('button');
-  decrease.classList.add(...quantityButtons);
+  decrease.classList.add('decrease-quantity-button');
   decrease.innerText = '-';
   decrease.addEventListener('click', () => {
     const currentValue = parseInt(input.value);

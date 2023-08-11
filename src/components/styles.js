@@ -14,17 +14,13 @@ const bookOfStyles = {
         'disabled:text-gray-700',
         'focus:outline-none',
         'focus:shadow-outline',
-        
-    ],
-    quantityElementsContainer: [
-        'flex-auto',
-        'justify-center',
     ],
     quantityButtons: [
         'w-[50px]',
-        'h-[25px]',
+        'h-[30px]',
         'bg-white',
-        'm-4'
+        'm-1',
+        'rounded'
     ]
 };
 

@@ -11,7 +11,6 @@ function navigateTo(url) {
 function getHomePageTemplate() {
   return `
    <div id="content" >
-      <img src="./src/assets/Endava.png" alt="summer">
       <div class="events flex items-center justify-center flex-wrap">
       </div>
     </div>
@@ -22,7 +21,7 @@ function getOrdersPageTemplate() {
   return `
     <div id="content">
     <h1 class="text-2xl mb-4 mt-8 text-center">Purchased Tickets</h1>
-    <div class="orders flex-1 items-center justify-center flex-column flex-wrap">
+    <div class="orders flex flex-wrap justify-center">
     </div>
     </div>
   `;
