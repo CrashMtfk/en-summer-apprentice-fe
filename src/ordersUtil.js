@@ -22,9 +22,9 @@ const createOrderElement = (orderData) => {
 
     const contentMarkup = `
         <div class="order-details">
-                <h2>Number of tickets: ${numberOfTickets}</h2>
-                <p>Total price: ${totalPrice}</p>
-                <p>Ordered at: ${orderedDate[0]}</p>
+                <h2>Number of tickets: <span>${numberOfTickets}</span></h2>
+                <p>Total price: <span>${totalPrice}</span></p>
+                <p>Ordered at: <span>${orderedDate[0]}</span></p>
         </div>
     `;
     orderDiv.innerHTML = contentMarkup;

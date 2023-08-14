@@ -24,9 +24,6 @@ const createEventElement = (eventData, title) => {
   const {eventID, venue, eventDescription, eventName, startDate, endDate, ticketCategorySet} = eventData;
   const eventDiv = document.createElement('div');
 
-  const purchaseQuantity = useStyle('purchaseQuantity');
-  const quantityButtons = useStyle('quantityButtons');
-
   eventDiv.classList.add('content', 'm-4', 'p-4', 'grid', 'place-items-center','drop-shadow-xl');
   const formatedPeriod = periodFormat(startDate,endDate);
 

@@ -154,12 +154,19 @@ input[type="number"]::-webkit-outer-spin-button {
 .orderCard{
   border-radius: 25px;
   width: 20%;
-  background-color: #de411b;
+  background-color: #1A1423;
   margin: 15px;
 }
 
 .order-details{
-  margin: 10px;
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+}
+
+.order-details h2{
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .order-actions{
@@ -174,4 +181,46 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 25px;
   border-radius: 25px;
   background-color: white;
+}
+
+/* Search bar style */
+.search {
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 1px solid #de411b;
+  border-right: none;
+  background-color: #1A1423;
+  padding: 5px;
+  height: 36px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: #de411b;
+}
+
+.searchButton {
+  width: 40px;
+  height: 36px;
+  border: 1px solid #de411b;
+  background: #de411b;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+  width: 30%;
+  margin: auto;
 }

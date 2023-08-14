@@ -11,6 +11,14 @@ function navigateTo(url) {
 function getHomePageTemplate() {
   return `
    <div id="content" >
+      <div class="wrap">
+        <div class="search">
+          <input type="text" class="searchTerm" placeholder="What event are you looking for?">
+          <button type="submit" class="searchButton">
+          <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
       <div class="events flex items-center justify-center flex-wrap">
       </div>
     </div>
@@ -67,12 +75,28 @@ function renderHomePage() {
 
   addLoader();
 
+  const searchButton = document.querySelector('.searchButton');
+  const searchInput = document.querySelector('.searchTerm');
+
+  searchButton.addEventListener('click', () => {
+    fetchTicketEvents()
+      .then(allEvents => {
+        const filteredEvents = allEvents.filter(event => {
+          const eventName = event.eventName.toLowerCase();
+          return eventName.includes(searchInput.value.toLowerCase());
+        });
+        addEvents(filteredEvents);
+      })
+      .catch(error => {
+        console.error('Error fetching events:', error);
+      });
+  });
+
   fetchTicketEvents()
   .then((data) => {
     setTimeout(() => {
       removeLoader();
     }, 180);
-    toastr.success("Events loaded succesfully!");
     addEvents(data);
   });
 
