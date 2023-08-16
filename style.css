@@ -1,6 +1,8 @@
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: #3D314A;
 }
+
 
 .events {
   justify-content: center;
@@ -15,34 +17,61 @@ h1 {
   color: #de411b;
 }
 
-.events .event {
-  width: 300px;
-  border: 1px solid #ebf1f6;
-  box-shadow: 0 0 2px 0 rgba(145,158,171,.2), 0 12px 24px -4px rgba(145,158,171,.12);
-}
-
 .event-title {
-  color: #de411b
+  color: #de411b;
+  text-shadow: 1px 2px 6px rgba(0,0,0,0.6);
 }
-
-.event img {
-  height: 150px;
+.event-image {
+  width: 100%;
+  height: 300px;
+  border-radius: 50px;
+  margin-bottom: 10px;
 }
 
 #ticketType {
-  width: 100%;
+  cursor: pointer;
+  width: 60%;
+  margin: auto;
+  height: 35px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
-.actions {
-  flex-wrap: wrap;
+#ticketType:hover {
+  background-color: #e0e0e0;
 }
 
-.quantity {
-  margin: 12px auto;
+#ticketType:focus {
+  border-color: #66afe9;
+  background-color: #fff;
 }
+
+#ticketType::after {
+  content: '\25BE'; 
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+#ticketType option {
+  font-size: 14px;
+}
+
+
 
 #page-header {
-  background-color: #fff;
+  background-color: #1A1423;
   position: sticky;
   top: 0;
 }
@@ -60,14 +89,138 @@ h1 {
   background-color: #de411b;
 }
 
-.add-to-cart-btn {
-  background: #de411b;
-  margin: 22px auto;
-  display: block;
-  width: 100%;
-}
-
 .main-content-component {
   margin-bottom: 40px;
 }
 
+.content{
+  width: 350px;
+  border-radius: 25px;
+  background-color: #1A1423;
+  box-shadow: -1px 14px 18px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: -1px 14px 18px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: -1px 14px 18px 0px rgba(0,0,0,0.75);
+}
+
+.buy-tickets-button {
+  width: 100px;
+  height: 30px;
+  border-radius: 25px;
+  background-color: white;
+  font-weight: 700;
+  transition: background-color 0.3s ease-in;
+}
+
+.buy-tickets-button:hover{
+  background-color: #de411b;
+}
+
+.buy-tickets-details {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  text-align: center;
+}
+
+.quantity-details {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  height: 25px;
+}
+
+.quantity-details input {
+  height: 100%;
+  width: 20%;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.quantity-details input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-buttons button{
+  margin: 0px 5px;
+  width: 25px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+}
+
+.orderCard{
+  border-radius: 25px;
+  width: 20%;
+  background-color: #1A1423;
+  margin: 15px;
+}
+
+.order-details{
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+}
+
+.order-details h2{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.order-actions{
+  display: flex;
+  justify-content: center;
+  width: 90%;
+}
+
+.order-actions button{
+  margin: 10px;
+  width: 100px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: white;
+}
+
+/* Search bar style */
+.search {
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 1px solid #de411b;
+  border-right: none;
+  background-color: #1A1423;
+  padding: 5px;
+  height: 36px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: #de411b;
+}
+
+.searchButton {
+  width: 40px;
+  height: 36px;
+  border: 1px solid #de411b;
+  background: #de411b;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+  width: 30%;
+  margin: auto;
+}

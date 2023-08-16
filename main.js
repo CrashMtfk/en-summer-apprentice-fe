@@ -1,3 +1,7 @@
+import { addEvents } from "./src/utils";
+import { addOrders } from "./src/ordersUtil";
+import { removeLoader, addLoader } from "./src/components/loader";
+
 // Navigate to a specific URL
 function navigateTo(url) {
   history.pushState(null, null, url);
@@ -7,10 +11,37 @@ function navigateTo(url) {
 function getHomePageTemplate() {
   return `
    <div id="content" >
-      <img src="./src/assets/Endava.png" alt="summer">
-      <div class="events flex items-center justify-center flex-wrap">
+      <div class="wrap">
+        <div class="search">
+          <input type="text" class="searchTerm" placeholder="What event are you looking for?">
+          <button type="submit" class="searchButton">
+          <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+      <div class="main-content flex justify-center">
+        <div class="api-search">
+        </div>
+        <div class="events flex items-center justify-center flex-wrap">
+        </div>
       </div>
     </div>
+  `;
+}
+
+function renderRadioButtonsFilter(){
+  return `
+    <fieldset>
+      <legend>Select events location: </legend>
+      <div>
+        <input type="radio" id="huey" name="drone" value="huey" checked />
+        <label for="huey">Huey</label>
+      </div>
+      <div>
+        <input type="radio" id="huey" name="drone" value="huey" checked />
+        <label for="huey">Huey</label>
+      </div>
+    </fieldset>
   `;
 }
 
@@ -18,6 +49,8 @@ function getOrdersPageTemplate() {
   return `
     <div id="content">
     <h1 class="text-2xl mb-4 mt-8 text-center">Purchased Tickets</h1>
+    <div class="orders flex flex-wrap justify-center">
+    </div>
     </div>
   `;
 }
@@ -59,40 +92,58 @@ function setupInitialPage() {
 function renderHomePage() {
   const mainContentDiv = document.querySelector('.main-content-component');
   mainContentDiv.innerHTML = getHomePageTemplate();
-  // Sample hardcoded event data
-  const eventData = {
-    id: 1,
-    description: 'Sample event description.',
-    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-    name: 'Sample Event',
-    ticketCategories: [
-      { id: 1, description: 'General Admission' },
-      { id: 2, description: 'VIP' },
-    ],
-  };
-  // Create the event card element
-  const eventCard = document.createElement('div');
-  eventCard.classList.add('event-card'); 
-  // Create the event content markup
-  const contentMarkup = `
-    <header>
-      <h2 class="event-title text-2xl font-bold">${eventData.name}</h2>
-    </header>
-    <div class="content">
-      <img src="${eventData.img}" alt="${eventData.name}" class="event-image w-full height-200 rounded object-cover mb-4">
-      <p class="description text-gray-700">${eventData.description}</p>
-    </div>
-  `;
 
-  eventCard.innerHTML = contentMarkup;
-  const eventsContainer = document.querySelector('.events');
-  // Append the event card to the events container
-  eventsContainer.appendChild(eventCard);
+  addLoader();
+
+  const searchButton = document.querySelector('.searchButton');
+  const searchInput = document.querySelector('.searchTerm');
+
+  searchButton.addEventListener('click', () => {
+    fetchTicketEvents()
+      .then(allEvents => {
+        const filteredEvents = allEvents.filter(event => {
+          const eventName = event.eventName.toLowerCase();
+          return eventName.includes(searchInput.value.toLowerCase());
+        });
+        addEvents(filteredEvents);
+      })
+      .catch(error => {
+        console.error('Error fetching events:', error);
+      });
+  });
+
+  fetchTicketEvents()
+  .then((data) => {
+    setTimeout(() => {
+      removeLoader();
+      toastr.success("Events loaded succesfully!");
+    }, 180);
+    addEvents(data);
+  });
 }
+
+// WORKSHOP 2
+async function fetchTicketEvents(){
+  const response = await fetch('http://localhost:8080/all_events');
+  const data = await response.json();
+  return data;
+}
+// WORKSHOP 2
 
 function renderOrdersPage(categories) {
   const mainContentDiv = document.querySelector('.main-content-component');
   mainContentDiv.innerHTML = getOrdersPageTemplate();
+
+  const customerID = 3;
+  fetchCustomerOrders(customerID).then((data) => {
+    addOrders(data);
+  });
+}
+
+async function fetchCustomerOrders(customerID){
+  const response = await fetch(`http://localhost:8080/orders/${customerID}`);
+  const data = await response.json();
+  return data;
 }
 
 // Render content based on URL
