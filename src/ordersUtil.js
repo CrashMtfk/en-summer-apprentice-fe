@@ -15,7 +15,7 @@ const createOrder = (orderData) => {
 };
 
 const createOrderElement = (orderData) => {
-    const {orderID,orderedAt, numberOfTickets, totalPrice} = orderData;
+    const {orderID,orderTicketCategoryID,orderedAt, numberOfTickets, totalPrice} = orderData;
     const orderDiv = document.createElement('div');
     orderDiv.classList.add('orderCard',`order-${orderID}`);
     const orderedDate = orderedAt.split('T');
@@ -28,18 +28,24 @@ const createOrderElement = (orderData) => {
         </div>
     `;
     orderDiv.innerHTML = contentMarkup;
+
     const editButton = document.createElement('button');
-    const deleteButton = document.createElement('button');
+    editButton.classList.add('edit-order');
     editButton.innerText = "Edit";
+    editButton.addEventListener('click', () => {
+        updateOrderHandler(orderID, orderTicketCategoryID);
+    });
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-order');
     deleteButton.innerText = "Delete";
+    deleteButton.addEventListener('click', () => {
+        deleteOrderHandler(orderID);
+    });
 
     const actions = document.createElement('div');
     actions.classList.add('order-actions')
     actions.appendChild(editButton);
-
-    deleteButton.addEventListener('click', () => {
-        deleteOrderHandler(orderID);
-    });
     actions.appendChild(deleteButton);
 
     orderDiv.appendChild(actions);
@@ -66,4 +72,75 @@ const deleteOrderHandler = (orderID) => {
         }
     })
     .catch(err => console.log(err));
+}
+
+const updateOrderHandler = (orderID, orderTicketCategoryID) => {
+    const buttonsDiv = document.querySelector(`.order-${orderID} .order-actions`);
+    const editButton = document.querySelector(`.order-${orderID} .order-actions .edit-order`);
+    const deleteButton = document.querySelector(`.order-${orderID} .order-actions .delete-order`);
+    const orderCard = document.querySelector(`.order-${orderID}`);
+
+    const editDetails = document.createElement('div');
+    editDetails.innerHTML = editOrderMarkup(orderID);
+    orderCard.insertBefore(editDetails, buttonsDiv);
+
+    document.querySelector(`.order-${orderID} .order-details`).setAttribute("hidden","");
+
+    buttonsDiv.removeChild(editButton);
+    buttonsDiv.removeChild(deleteButton);
+
+    const confirmUpdatesButton = document.createElement('button');
+    confirmUpdatesButton.innerText = "Confirm";
+    confirmUpdatesButton.addEventListener('click', () => {
+        const numberOfTickets = document.getElementById(`number-of-tickets-${orderID}`).value;
+        fetch(`http://localhost:5196/api/Order/UpdateOrder/${orderID}/${numberOfTickets}/${orderTicketCategoryID}`,{
+            method: 'PATCH',
+            headers: {
+                'Content-Type':'application/json',
+            },
+            body: JSON.stringify({
+                orderId:orderID,
+                numberOfTickets: numberOfTickets,
+                ticketCategoryID: orderTicketCategoryID
+            }),
+        }).
+        then((res) => {
+            if(!res.ok){
+                return res.json();
+            }
+            buttonsDiv.removeChild(confirmUpdatesButton);
+            buttonsDiv.removeChild(cancelUpdatesButton);
+            orderCard.removeChild(editDetails);
+            document.querySelector(`.order-${orderID} .order-details`).removeAttribute("hidden");
+
+            buttonsDiv.appendChild(editButton);
+            buttonsDiv.appendChild(deleteButton);
+            return res.json();
+        })
+        .catch(err => 
+            {throw new Error(err)
+        });
+    });
+
+    const cancelUpdatesButton = document.createElement('button');
+    cancelUpdatesButton.innerText = "Cancel";
+    cancelUpdatesButton.addEventListener('click', () => {
+        buttonsDiv.removeChild(confirmUpdatesButton);
+        buttonsDiv.removeChild(cancelUpdatesButton);
+        orderCard.removeChild(editDetails);
+        document.querySelector(`.order-${orderID} .order-details`).removeAttribute("hidden");
+
+        buttonsDiv.appendChild(editButton);
+        buttonsDiv.appendChild(deleteButton);
+    });
+
+    buttonsDiv.appendChild(confirmUpdatesButton);
+    buttonsDiv.appendChild(cancelUpdatesButton);
+}
+
+function editOrderMarkup(orderID){
+    return `
+        <label for="number-of-tickets" class="text-white">Number of tickets:</label>
+        <input type='number' id='number-of-tickets-${orderID}' name='number-of-tickets'/>
+    `;
 }

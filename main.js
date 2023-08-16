@@ -142,7 +142,6 @@ function renderOrdersPage(categories) {
 
 async function fetchCustomerOrders(customerID){
   const response = await fetch(`http://localhost:8080/orders/${customerID}`);
-  console.log(response);
   const data = await response.json();
   return data;
 }
