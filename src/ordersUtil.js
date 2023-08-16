@@ -15,9 +15,9 @@ const createOrder = (orderData) => {
 };
 
 const createOrderElement = (orderData) => {
-    const {orderedAt, numberOfTickets, totalPrice} = orderData;
+    const {orderID,orderedAt, numberOfTickets, totalPrice} = orderData;
     const orderDiv = document.createElement('div');
-    orderDiv.classList.add('orderCard')
+    orderDiv.classList.add('orderCard',`order-${orderID}`);
     const orderedDate = orderedAt.split('T');
 
     const contentMarkup = `
@@ -36,8 +36,34 @@ const createOrderElement = (orderData) => {
     const actions = document.createElement('div');
     actions.classList.add('order-actions')
     actions.appendChild(editButton);
+
+    deleteButton.addEventListener('click', () => {
+        deleteOrderHandler(orderID);
+    });
     actions.appendChild(deleteButton);
 
     orderDiv.appendChild(actions);
     return orderDiv;
 };
+
+const deleteOrderHandler = (orderID) => {
+    fetch(`http://localhost:5196/api/Order/DeleteOrder/${orderID}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type':'application/json',
+        }
+    })
+    .then(res => {
+        if(!res.ok){
+            return res.json();
+        }
+        const orderToBeRemoved = document.querySelector(`.order-${orderID}`);
+        if (orderToBeRemoved) {
+            orderToBeRemoved.remove();
+            toastr.success("Success delete");
+        } else {
+            console.log("Order element not found.");
+        }
+    })
+    .catch(err => console.log(err));
+}

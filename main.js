@@ -19,9 +19,29 @@ function getHomePageTemplate() {
           </button>
         </div>
       </div>
-      <div class="events flex items-center justify-center flex-wrap">
+      <div class="main-content flex justify-center">
+        <div class="api-search">
+        </div>
+        <div class="events flex items-center justify-center flex-wrap">
+        </div>
       </div>
     </div>
+  `;
+}
+
+function renderRadioButtonsFilter(){
+  return `
+    <fieldset>
+      <legend>Select events location: </legend>
+      <div>
+        <input type="radio" id="huey" name="drone" value="huey" checked />
+        <label for="huey">Huey</label>
+      </div>
+      <div>
+        <input type="radio" id="huey" name="drone" value="huey" checked />
+        <label for="huey">Huey</label>
+      </div>
+    </fieldset>
   `;
 }
 
@@ -96,10 +116,10 @@ function renderHomePage() {
   .then((data) => {
     setTimeout(() => {
       removeLoader();
+      toastr.success("Events loaded succesfully!");
     }, 180);
     addEvents(data);
   });
-
 }
 
 // WORKSHOP 2
