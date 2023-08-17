@@ -140,7 +140,9 @@ const updateOrderHandler = (orderID, orderTicketCategoryID) => {
 
 function editOrderMarkup(orderID){
     return `
-        <label for="number-of-tickets" class="text-white">Number of tickets:</label>
-        <input type='number' id='number-of-tickets-${orderID}' name='number-of-tickets'/>
+        <div class="flex flex-col justify-center items-center m-4">
+            <label for="number-of-tickets" class="text-white text-center text-xl font-bold">Number of tickets:</label>
+            <input type='number' id='number-of-tickets-${orderID}' name='number-of-tickets' class="update-input"/>
+        </div>
     `;
 }
