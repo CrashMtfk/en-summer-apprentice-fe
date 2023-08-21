@@ -29,22 +29,6 @@ function getHomePageTemplate() {
   `;
 }
 
-function renderRadioButtonsFilter(){
-  return `
-    <fieldset>
-      <legend>Select events location: </legend>
-      <div>
-        <input type="radio" id="huey" name="drone" value="huey" checked />
-        <label for="huey">Huey</label>
-      </div>
-      <div>
-        <input type="radio" id="huey" name="drone" value="huey" checked />
-        <label for="huey">Huey</label>
-      </div>
-    </fieldset>
-  `;
-}
-
 function getOrdersPageTemplate() {
   return `
     <div id="content">
@@ -97,7 +81,7 @@ function renderHomePage() {
 
   const searchButton = document.querySelector('.searchButton');
   const searchInput = document.querySelector('.searchTerm');
-
+  
   searchButton.addEventListener('click', () => {
     fetchTicketEvents()
       .then(allEvents => {
@@ -112,6 +96,14 @@ function renderHomePage() {
       });
   });
 
+  renderRadioButtonsFilter()
+    .then(filterMarkup => {
+      const apiSearchNode = document.querySelector('.api-search');
+      apiSearchNode.appendChild(filterMarkup);
+  });
+
+  const filterSearchButton = document.querySelector('.filter-search-button');
+
   fetchTicketEvents()
   .then((data) => {
     setTimeout(() => {
@@ -119,8 +111,60 @@ function renderHomePage() {
       toastr.success("Events loaded succesfully!");
     }, 180);
     addEvents(data);
+    console.log(data);
   });
 }
+
+function renderRadioButtonsFilter(){
+  return fetchTicketEvents() // Return the eventPromise here
+    .then(events => {
+      const filterContainer = document.createElement('div');
+
+      const eventTypes = new Set(events.map(event =>
+        `<input type="radio" id="${event.eventTypeName}" value="${event.eventTypeName}" name="eventType"/>
+         <label for="${event.eventTypeName}">${event.eventTypeName}</label><br>`
+      ));
+
+      const locations = new Set(events.map(event =>
+        `<input type="radio" id="${event.venue.venueLocation}" value="${event.venue.venueLocation}" name="eventLocation"/>
+         <label for="${event.venue.venueLocation}">${event.venue.venueLocation}</label><br>`
+      ));
+
+      const searchButton = document.createElement('button');
+      searchButton.classList.add('buy-tickets-button','filter-search-button');
+      searchButton.innerText = "Search";
+
+      filterContainer.innerHTML = `
+      <div class="text-white">
+        <div class="radio-event-type">
+          <fieldset>
+          <legend>Select event type</legend>
+            ${Array.from(eventTypes).join('\n')}
+          </fieldset>
+        </div>
+        <div class="radio-location">
+          <fieldset>
+            <legend>Select location</legend>
+            ${Array.from(locations).join('\n')}
+          </fieldset>
+        </div>
+      </div>
+      `;
+      filterContainer.appendChild(searchButton);
+      searchButton.addEventListener('click', () => {
+          const selectedEventType = document.querySelector('input[name="eventType"]:checked').value;
+          const selectedLocation = document.querySelector('input[name="eventLocation"]:checked').value;
+          fetch(`http://localhost:8080/events?venueLocation=${decodeURIComponent(selectedLocation)}&eventType=${decodeURIComponent(selectedEventType)}`)
+            .then(response => response.json())
+            .then(data => addEvents(data));
+      })
+      return filterContainer; // Return the filterContainer DOM node
+    })
+    .catch(error => {
+      console.error('Error rendering radio buttons filter:', error);
+    });
+}
+
 
 // WORKSHOP 2
 async function fetchTicketEvents(){
